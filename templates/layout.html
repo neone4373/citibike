@@ -1,0 +1,35 @@
+<!doctype html>
+<head>
+
+  <title>Neo's D3 Page</title>
+  <script type=text/javascript
+    src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script> 
+  <script type=text/javascript>
+    var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
+ <!--[if lte IE 8]>
+     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.ie.css" />
+ <![endif]-->
+  {% if not Titan %}  <!-- #turns off analitics if dev --> 
+    <script type="text/javascript">
+      var analytics=analytics||[];analytics.load=function(e){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src=("https:"===document.location.protocol?"https://":"http://")+"d2dq2ahtl5zl1z.cloudfront.net/analytics.js/v1/"+e+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n);var r=function(e){return function(){analytics.push([e].concat(Array.prototype.slice.call(arguments,0)))}},i=["identify","track","trackLink","trackForm","trackClick","trackSubmit","pageview","ab","alias","ready"];for(var s=0;s<i.length;s++)analytics[i[s]]=r(i[s])};
+    analytics.load("ojunta8hmd");
+    </script>
+  {% endif %}
+  <!-- {% print "Titan = ", Titan %} -->  
+  <!-- <link href='http://fonts.googleapis.com/css?family=Actor' rel='stylesheet' type='text/css'> -->
+  <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
+
+  {% assets "scss_all" %}
+  <link rel=stylesheet type=text/css href="{{ ASSET_URL }}">
+  {% endassets %}
+  <!-- <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}"> -->
+</head>
+<!-- For Debugging :)
+<script src="http://jsconsole.com/remote.js?9D925085-5461-4070-8E9A-4155BFAABFDA"></script>
+-->
+
+{% block body %}{% endblock %}
+
+

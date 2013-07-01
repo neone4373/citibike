@@ -1,0 +1,128 @@
+.pull-left {
+  float: left;
+}
+.pull-right {
+  float: right;
+}
+.clear {
+  float: none;
+  clear: both;
+}
+a {
+  text-decoration: none;
+}
+body {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+    Helvetica, Arial, "Lucida Grande", sans-serif;
+  text-align: center;
+  color: #aaaaaa;
+  background: #f2f9fe;
+  background: -moz-linear-gradient(top, #f2f9fe 0%, #d6f0fd 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,
+    #f2f9fe), color-stop(100%, #d6f0fd));
+  background: -webkit-linear-gradient(top, #f2f9fe 0%, #d6f0fd 100%);
+  background: -o-linear-gradient(top, #f2f9fe 0%, #d6f0fd 100%);
+  background: -ms-linear-gradient(top, #f2f9fe 0%, #d6f0fd 100%);
+  background: linear-gradient(bottom, #f2f9fe 0%, #d6f0fd 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f9fe',
+    endColorstr='#d6f0fd',GradientType=0 );
+  background-attachment: fixed;
+  margin: 0px auto;
+  width: 940px;
+}
+body.graph {
+  background: #fff;
+}
+iframe {
+  text-align: left;
+  border: 1px solid #1e90ff;
+  box-shadow: 0px 0px 5px grey;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+#map {
+  width: 940px;
+  height: 750px;
+}
+div.idiv {
+  width: 783px;
+  margin: 0px auto;
+}
+div.idiv p {
+  text-align: left;
+}
+a, h1, h2 {
+  color: #444;
+}
+h1, h2 {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+    Helvetica, Arial, "Lucida Grande", sans-serif;
+  margin: 0;
+}
+h1 {
+  border-bottom: 2px solid #eee;
+}
+h2 {
+  font-size: 1.2em;
+}
+a {
+  font-size: .75em;
+}
+.page {
+  margin: 2em auto;
+  width: 35em;
+  border: 5px solid #ccc;
+  padding: 0.8em;
+  background: #ffffff;
+}
+.entries {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.entries li {
+  margin: 0.8em 1.2em;
+}
+.entries li h2 {
+  margin-left: -1em;
+}
+.add-entry {
+  font-size: 0.9em;
+  border-bottom: 1px solid #ccc;
+}
+.add-entry dl {
+  font-weight: bold;
+}
+.metanav {
+  text-align: right;
+  font-size: 0.8em;
+  padding: 0.3em;
+  margin-bottom: 1em;
+  background: #fafafa;
+}
+.flash {
+  background: #CEE5F5;
+  padding: 0.5em;
+  border: 1px solid #AACBE2;
+}
+.error {
+  background: #F0D6D6;
+  padding: 0.5em;
+}
+.fig {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+    Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-size: 10pt;
+  color: #add8e6;
+}
+.axis line, .axis path {
+  fill: none;
+  stroke: #000000;
+  shape-rendering: crispEdges;
+}
+.axis text {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+    Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-size: 11px;
+}

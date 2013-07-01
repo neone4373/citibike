@@ -1,0 +1,139 @@
+{% extends "layout.html" %}
+{% block body %}
+<body class = 'splash'>
+    <p> Some cool stuff here
+    <br>
+    <div id="map">
+        <script type="text/javascript">
+            var map = new L.Map('map', {
+                center: [40.725876,-73.985713], 
+                zoom: 13
+                })
+                .addLayer(new L.tileLayer('http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg', {
+                    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png">',
+                    maxZoom: 16,
+                    minZoom: 12
+                }));
+
+            var svg = d3.select(map.getPanes().overlayPane).append("svg")
+                // .style("border", "1px solid black")
+                ,
+                g = svg.append("g").attr("class", "leaflet-zoom-hide");
+
+            // var station_data;
+
+            d3.json("api_call/station", function(stations) {
+                var bounds = d3.geo.bounds(stations)
+                    // ,path = d3.geo.path().projection(project)
+                    // circle = d3.geo.path().projection(project)
+                    ;
+                station_data = stations.features
+
+                function project(x, element) {
+                    var point = map.latLngToLayerPoint(new L.LatLng(x[1], x[0]));
+                    if (element == 0) {
+                        return point.x;
+                    }
+                    else if (element == 1) {
+                        return point.y;
+                    }
+                    else {
+                     return [point.x, point.y];
+                    }
+                }
+
+                // var feature = g.selectAll("path")
+                //     .data(stations.features)
+                //   .enter()
+                //   .append("path")
+                //             // .attr("class", "dot")
+                // ;
+                var feature = g.selectAll("circle")
+                    .data(stations.features)
+                  .enter()
+                  .append("circle")
+                ;
+
+                // Reposition the SVG to cover the features.
+                function reset() {
+                    var bottomLeft = project(bounds[0]),
+                        topRight = project(bounds[1]);
+
+                    svg.attr("width", topRight[0] - bottomLeft[0])
+                        .attr("height", bottomLeft[1] - topRight[1])
+                        .style("margin-left", bottomLeft[0]  + "px")
+                        .style("margin-top", topRight[1] + "px");
+
+                    g.attr("transform", "translate(" + -bottomLeft[0] + "," + -topRight[1] + ")");
+
+                    // feature.attr("d", path)
+                    feature
+                        // .attr("d", circle)
+                        .attr("class", "dot")
+                        .attr("r", 5)
+                        .attr("cy", function(d){ return project(d.geometry.coordinates, 1) })
+                        .attr("cx", function(d){ return project(d.geometry.coordinates, 0) })
+                        .style("fill", "blue")
+                        .style("opacity", 1)
+                }
+
+
+                map.on("viewreset", reset);
+                reset();
+
+            });
+            // var peek;
+            function runUpdate() {
+                d3.json("api_call/update", function(stations) {});
+                // console.log(i)
+            }
+            var t = setInterval(runUpdate, 30000)
+            // setTimeout(function(){
+            //     clearInterval(t);
+            // console.log("fin")
+            // }, 2100);
+
+        </script>
+    </div>
+    <br>
+    <img src="http://placekitten.com/{{width}}/{{height}}">
+    <br>
+</body>
+{% endblock %}
+
+<!-- 
+            // function post_to_url(path, params, method) {
+            //     method = method || "post"; // Set method to post by default if not specified.
+
+            //     // The rest of this code assumes you are not using a library.
+            //     // It can be made less wordy if you use one.
+            //     var form = document.createElement("form");
+            //     form.setAttribute("method", method);
+            //     form.setAttribute("action", path);
+
+            //     for(var key in params) {
+            //         if(params.hasOwnProperty(key)) {
+            //             var hiddenField = document.createElement("input");
+            //             hiddenField.setAttribute("type", "hidden");
+            //             hiddenField.setAttribute("name", key);
+            //             hiddenField.setAttribute("value", params[key]);
+
+            //             form.appendChild(hiddenField);
+            //          }
+            //     }
+
+            //     document.body.appendChild(form);
+            //     form.submit();
+            // }
+            // var requesting = {'entry': {"post": "test"}},
+            //     text = "entry=cookie";
+            // // var return_data = 
+            // // var new_data;
+            // // d3.json(post_to_url("api_call/update", request), function(updates) {
+            // // new_data = d3.xhr.post(requesting, "api_call/update")
+            // // var new_data = 
+            // console.log(d3.json("api_call/update")
+            //     .header("Content-type", "application/x-www-form-urlencoded")
+            //     .post("entry=y&egg=7", function(error, text) { console.log(text); } ))
+            // //     new_data = updates;
+            // }); -->

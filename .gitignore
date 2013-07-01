@@ -10,6 +10,8 @@
 /settlers
 /networkData
 /build
+static/.web*
+citibike
 
 # Ignore the default SQLite database.
 /db/*.sqlite3
