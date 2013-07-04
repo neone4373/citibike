@@ -13,10 +13,11 @@ from coordinate_distance import haversine
 
 
 def pullingJson(request_type, station=None):
-    pullingJson.update_url = "http://appservices.citibikenyc.com/data2/stations.php?updateOnly=true"
-    pullingJson.station_url = "http://appservices.citibikenyc.com/data2/stations.php"
-    pullingJson.helmetsURL = 'http://appservices.citibikenyc.com/v1/helmet/list'
-    pullingJson.branchesURL = 'http://appservices.citibikenyc.com/v1/branch/list'
+    base_url = "http://appservices.citibikenyc.com/"
+    pullingJson.update_url = base_url + "data2/stations.php?updateOnly=true"
+    pullingJson.station_url = base_url + "data2/stations.php"
+    pullingJson.helmetsURL = base_url + 'v1/helmet/list'
+    pullingJson.branchesURL = base_url + 'v1/branch/list'
     try:
         if request_type == "station":
             r = requests.get(pullingJson.station_url)
@@ -31,7 +32,10 @@ def pullingJson(request_type, station=None):
             logger.info(diff_dict)
             json_text = json.dumps(return_dict)
         else:
-            json_text = json.dumps({"ok": False, "error": "option not recognized"})
+            json_text = json.dumps({
+                "ok": False,
+                "error": "option not recognized"
+            })
     except Exception as error:
         logger.exception("/033[31mmoo...")
         json_text = json.dumps({"ok": False, "error": str(error)})
@@ -43,21 +47,26 @@ def pullDiffs(update_dict, station_dict):
     updated_station_dict = {
         "type": "FeatureCollection",
         # "features": [g.values() for g in station_dict['features']]
-        "features": []
+        "features": [],
+        "lastUpdate":  update_dict['lastUpdate']
     }
     for station in update_dict["results"]:
         _id = station['id']
         if int(_id) in station_dict.keys() and station["status"] == "Active":
-            # logger.info("%s and %s" % (station["availableBikes"], station_dict[_id]['availableBikes']))
+            # logger.info("%s and %s" %
+            #    (station["availableBikes"],\
+            # station_dict[_id]['availableBikes']))
             if station["availableBikes"] != station_dict[_id]['availableBikes']:
                 # logger.info("we got one!")
-                bike_increase = station["availableBikes"] - station_dict[_id]['availableBikes']
+                bike_increase = station["availableBikes"] -\
+                    station_dict[_id]['availableBikes']
                 diff_dict[_id] = bike_increase
             updated_station = station_dict[_id]
             updated_station["availableBikes"] = station["availableBikes"]
             updated_station["availableBikes"] = station["availableBikes"]
             updated_station["availableBikes"] = station["availableBikes"]
             updated_station_dict['features'] += [updated_station]
+    # logger.info(updated_station_dict)
     return diff_dict, updated_station_dict
 
 
@@ -67,7 +76,8 @@ def pullDiffs(update_dict, station_dict):
 #         _id = station['id']
 #         if _id in station_dict.keys():
 #             if station["availableBikes"] != station_dict[_id]['availableBikes']:
-#                 bike_increase = station["availableBikes"] - station_dict[_id]['availableBikes']
+#                 bike_increase = station["availableBikes"] -\
+#                    station_dict[_id]['availableBikes']
 #         return_dict[_id] = bike_increase
 #     return return_dict
 
@@ -99,7 +109,6 @@ def stationDistanceTiers(station_dict):
     #do some badass distance tiers for each station
     """then add a way to take the stations which see
     a change and explain where the bikes went        """
-
 
 
 def appendGeoJson(lat, lng):

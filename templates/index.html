@@ -20,15 +20,11 @@
                 ,
                 g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
-            // var station_data;
-
+            var station_data, myApp = {};
             d3.json("api_call/station", function(stations) {
-                var bounds = d3.geo.bounds(stations)
-                    // ,path = d3.geo.path().projection(project)
-                    // circle = d3.geo.path().projection(project)
-                    ;
-                station_data = stations.features
 
+                var bounds = d3.geo.bounds(stations);
+                station_data = stations
                 function project(x, element) {
                     var point = map.latLngToLayerPoint(new L.LatLng(x[1], x[0]));
                     if (element == 0) {
@@ -41,19 +37,57 @@
                      return [point.x, point.y];
                     }
                 }
+                
 
-                // var feature = g.selectAll("path")
-                //     .data(stations.features)
-                //   .enter()
-                //   .append("path")
-                //             // .attr("class", "dot")
-                // ;
-                var feature = g.selectAll("circle")
-                    .data(stations.features)
-                  .enter()
-                  .append("circle")
-                ;
+                function populateStations(feature) {
+                    // console.log(feature)
+                    feature
+                        // .attr("r", 10)
+                        .attr("r", 0)
+                        .attr("class", "dot")
+                        .attr("cy", function(d){ return project(d.geometry.coordinates, 1) })
+                        .attr("cx", function(d){ return project(d.geometry.coordinates, 0) })
+                        .style("fill", "blue")
+                        .style("opacity", function(d) { return d.availableBikes / ( d.availableBikes + d.availableDocks)})
+                        .transition()
+                        .attr("r", 7)
+                        .duration(100)
+                }
 
+                function populateSationText(text_feature) {
+                    text_feature.transition()
+                        .attr("class", "text")
+                        .attr("y", function(d){ return project(d.geometry.coordinates, 1) })
+                        .attr("x", function(d){ return project(d.geometry.coordinates, 0) })
+                        .text(function(d) { return d.availableBikes / ( d.availableBikes + d.availableDocks)})
+                        .attr("font-family", "sans-serif")
+                        .attr("font-size", "20px")
+                        .attr("fill", "grey")
+                }  
+
+                function bindVisualization(data) {
+                    myApp.feature = g.selectAll("circle")
+                        .data(data)
+                      .enter()
+                      .append("circle")
+                    //   ,
+                    // myApp.text_feature = g.selectAll("text")
+                    //     .data(data)
+                    //   .enter()
+                    //   .append("text")
+                    ;
+                    // return feature, display;
+                }
+
+                function updateGraph(data) {
+                    bindVisualization(data)
+                    populateStations(myApp.feature)
+                    console.log(myApp.feature)
+                }
+
+                bindVisualization(stations.features);
+                // console.log(myApp.feature)
+                // var d3_layer.feature, text_feature = bindVisualization(stations.features);
                 // Reposition the SVG to cover the features.
                 function reset() {
                     var bottomLeft = project(bounds[0]),
@@ -66,32 +100,46 @@
 
                     g.attr("transform", "translate(" + -bottomLeft[0] + "," + -topRight[1] + ")");
 
-                    // feature.attr("d", path)
-                    feature
-                        // .attr("d", circle)
-                        .attr("class", "dot")
-                        .attr("r", 5)
-                        .attr("cy", function(d){ return project(d.geometry.coordinates, 1) })
-                        .attr("cx", function(d){ return project(d.geometry.coordinates, 0) })
-                        .style("fill", "blue")
-                        .style("opacity", 1)
-                }
+                    // console.log(feature)
+                    populateStations(myApp.feature)
+                    // populateSationText(myApp.text_feature)
+                    // console.log(myApp.text_feature)
 
+                    // console.log(stations, new_stations)
+                    // if (stations != new_stations) {
+                    //     // console.log(stations)
+                    //     bindVisualization(new_stations);
+                    //     myApp.feature.transition()
+                    //             .attr("r", 100)
+                    //             .duration(1000);
+                    //     populateStations(myApp.feature)
+                    // }
+                }
 
                 map.on("viewreset", reset);
                 reset();
 
+                // displayMap(stations, stations);
+
+
+                // function runUpdate() {
+                //     d3.json("api_call/update", function(stations) {
+                //         // var transition_feature = myApp.feature.transition()
+                //         //         .attr("r", 100)
+                //         //         .duration(1000);
+                //         updateGraph(stations, myApp.feature)
+                //     });
+
+                // }
+                // runUpdate()
+                // var t = setInterval(runUpdate, 3000)
+                // setTimeout(function(){
+                //     clearInterval(t);
+                // console.log("fin")
+                // }, 21000);
             });
-            // var peek;
-            function runUpdate() {
-                d3.json("api_call/update", function(stations) {});
-                // console.log(i)
-            }
-            var t = setInterval(runUpdate, 30000)
-            // setTimeout(function(){
-            //     clearInterval(t);
-            // console.log("fin")
-            // }, 2100);
+
+            
 
         </script>
     </div>
@@ -101,39 +149,3 @@
 </body>
 {% endblock %}
 
-<!-- 
-            // function post_to_url(path, params, method) {
-            //     method = method || "post"; // Set method to post by default if not specified.
-
-            //     // The rest of this code assumes you are not using a library.
-            //     // It can be made less wordy if you use one.
-            //     var form = document.createElement("form");
-            //     form.setAttribute("method", method);
-            //     form.setAttribute("action", path);
-
-            //     for(var key in params) {
-            //         if(params.hasOwnProperty(key)) {
-            //             var hiddenField = document.createElement("input");
-            //             hiddenField.setAttribute("type", "hidden");
-            //             hiddenField.setAttribute("name", key);
-            //             hiddenField.setAttribute("value", params[key]);
-
-            //             form.appendChild(hiddenField);
-            //          }
-            //     }
-
-            //     document.body.appendChild(form);
-            //     form.submit();
-            // }
-            // var requesting = {'entry': {"post": "test"}},
-            //     text = "entry=cookie";
-            // // var return_data = 
-            // // var new_data;
-            // // d3.json(post_to_url("api_call/update", request), function(updates) {
-            // // new_data = d3.xhr.post(requesting, "api_call/update")
-            // // var new_data = 
-            // console.log(d3.json("api_call/update")
-            //     .header("Content-type", "application/x-www-form-urlencoded")
-            //     .post("entry=y&egg=7", function(error, text) { console.log(text); } ))
-            // //     new_data = updates;
-            // }); -->

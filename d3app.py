@@ -4,17 +4,17 @@
 """
 import os
 import analytics
-from flask import Flask, jsonify, render_template, request, abort
+from flask import Flask, jsonify, render_template, abort
 from jinja2 import TemplateNotFound
 from flask.ext.assets import Environment, Bundle
 import logging
 import conf.config as config
 logger = config.globalLogger(logging.DEBUG)
 analytics.init('82cl6i9bo6h4cnptal9b')
-from pull_json import writeStations, pullingJson
+from pull_json import pullingJson
 import random
 import json
-from pprint import pformat
+# from pprint import pformat
 
 #instatntiate the web app
 app = Flask(__name__)
@@ -54,7 +54,7 @@ def callCiti(api_name=None):
     if api_name == "station":
         global station, count_of_calls
         json_object = pullingJson(api_name)
-        station_dict = json.loads(json_object, station)
+        station_dict = json.loads(json_object)
         station = {g["id"]: g for g in station_dict['features']}
         count_of_calls = 1
     elif api_name == "update":
@@ -123,5 +123,5 @@ if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
     # PORT = 5000 if len(sys.argv)
     port = int(os.environ.get('PORT', 5000))
+    callCiti("station")
     app.run(host='0.0.0.0', port=port)
-    callCiti()
